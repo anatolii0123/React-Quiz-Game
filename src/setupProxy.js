@@ -8,7 +8,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: (!!env && env.includes('production')) ? 'https://arcane-atoll-82454.herokuapp.com' : 'https://arcane-atoll-82454.herokuapp.com',
+      target: (!!env && env.includes('production')) ? 'https://arcane-atoll-82454.herokuapp.com' : 'http://localhost:3231',
       changeOrigin: true,
     })
   );
