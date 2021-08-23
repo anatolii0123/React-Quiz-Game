@@ -1,0 +1,65 @@
+@import "./colors.css";
+
+.appBar {
+	z-index: 9;
+	position: fixed;
+	width: 100%;
+	display: flex;
+	color: white;
+	padding: 0px 5px;
+	padding-right: 15px;
+	justify-content: space-between;
+	background-color: #294634;
+	box-shadow: black 0px 1px 6px;
+}
+.slider {
+  z-index: 9;
+  background-color: #294634;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home {
+  text-align: center;
+  /* font-family: Roboto; */
+  font-style: normal;
+  padding: 10px;
+  font-size: 30px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.home b {
+  /* font-family: Roboto; */
+  font-size: 30px;
+}
+.home:hover {
+  color: var(--accent-mustard);
+}
+.appBar-user {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px;
+	margin: 0 10px;
+}
+.appBar-user p {
+  font-size: 40;
+}
+@media (max-width: 768px) {
+  .home {
+    padding: 0;
+  }
+  .slider {
+    height: 50px;
+  }
+  .appBar-user p {
+    margin: 0;
+  }
+  .home {
+    font-size: 20px;
+  }
+  .home b {
+    font-size: 20px;
+  }
+}
