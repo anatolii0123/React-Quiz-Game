@@ -14,7 +14,7 @@ const userRoute = require('./Routes/Users')
 const quizzesRoute = require('./Routes/Quizzes')
 let { students, clients, tests } = require('./data/students')
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 80
 
 app.use(express.json())
 app.use(fileUpload());
