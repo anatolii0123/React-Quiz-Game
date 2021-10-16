@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import './OneTimeDashboard.css'
-import UsernameModal from '../components/UsernameModal'
 import firebase from '../firebase/firebase'
 
 const OneTimeDashboard = ({ user }) => {
@@ -18,7 +17,7 @@ const OneTimeDashboard = ({ user }) => {
 	// }
 
 	if (path.length > 0) return <Redirect push to={path} />
-	if (!username && !firebase.auth().currentUser) return <Redirect push to='/name' />
+	if (!username && !firebase.auth().currentUser) return <Redirect push to='/' />
 
 	return (
 		<div className='one-time-dashboard'>
@@ -27,9 +26,6 @@ const OneTimeDashboard = ({ user }) => {
 					<h1 className='white'>
 						<b>Quiz</b>
 					</h1>
-					<button className='button one-time-button' onClick={onDashboard}>
-						Dashboard
-					</button>
 					<button className='button one-time-button' onClick={onCreateQuiz}>
 						Create Quiz
 					</button>

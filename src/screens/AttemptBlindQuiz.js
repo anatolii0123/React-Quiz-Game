@@ -31,7 +31,6 @@ const AttemptBlindQuiz = ({ match }) => {
 		commands
 	})
 	const synthRef = React.useRef(window.speechSynthesis)
-	console.log('transcript:' + transcript)
 	const spaceFunction = React.useCallback(
 		(event) => {
 			if (event.keyCode === 32) {
@@ -44,7 +43,6 @@ const AttemptBlindQuiz = ({ match }) => {
 					speak('You have already attempted this quiz.')
 				else {
 					SpeechRecognition.startListening({ continuous: true })
-					console.log('start listening...')
 					speak('Listening Started.')
 					resetTranscript()
 				}
@@ -127,7 +125,6 @@ const AttemptBlindQuiz = ({ match }) => {
 			else
 				speak(`Your score is ${body.score} out of ${attemptedQuestions.length}`)
 			SpeechRecognition.abortListening()
-			console.log('res body : ', body)
 		} catch (e) {
 			console.log('Error Submitting quiz', e)
 		}
@@ -196,7 +193,6 @@ const AttemptBlindQuiz = ({ match }) => {
 					) {
 						if (option === 'for') option = 4
 						else if (option === 'to') option = 2
-						console.log('option :' + option)
 						speak(
 							`You chose option ${option} : ${questions[currentIndex].options[option - 1].text
 							}`
@@ -290,7 +286,6 @@ const AttemptBlindQuiz = ({ match }) => {
 	const handleOptionSelect = (e, option, index) => {
 		const temp = [...attemptedQuestions]
 		const options = temp[index].selectedOptions
-		console.log('index:' + index)
 		if (!options.includes(option) && e.target.checked) {
 			if (attemptedQuestions[index].optionType === 'radio') options[0] = option
 			else options.push(option)

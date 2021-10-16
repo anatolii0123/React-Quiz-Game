@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { Icon } from '@material-ui/core'
 import './Sidebar.css'
-import firebase from '../firebase/firebase'
 
 import {
 	CreateNewFolder,
@@ -11,78 +10,69 @@ import {
 	MeetingRoom,
 	MenuOpenRounded,
 	MenuRounded,
+	AssignmentInd
 } from '@material-ui/icons'
 
-function Sidebar({ setUsername }) {
+function Sidebar({ setUsername, setUser, setPath, user, logout }) {
 	const [signOut, setSignOut] = useState(false)
+	// const user = localStorage.getItem('user')
 	const SidedbarData = [
 		{
 			title: 'Dashboard',
-			path: '/dashboard',
+			path: !!user ? '/admin/dashboard' : '/dashboard',
 			icon: <Dashboard />,
 			CName: 'nav-text',
 		},
 		{
-			title: 'Join Quiz',
-			path: '/join-quiz',
-			icon: <MeetingRoom />,
-			CName: 'nav-text',
-		},
-		{
 			title: 'Create Quiz',
-			path: '/create-quiz',
+			path: '/create-quiz/',
 			icon: <CreateNewFolder />,
 			CName: 'nav-text',
-		},
+		}
 	]
 	const [sidebar, setSidebar] = useState(false)
 	const showSidebar = () => setSidebar(!sidebar)
-	if (signOut) {
-		localStorage.removeItem('username')
-		localStorage.removeItem('id')
-		setUsername('');
-		return <Redirect to='/' />
-	}
 
+	const username = localStorage.getItem('username')
+
+	if (signOut) {
+		logout()
+		setSignOut(false)
+	}
+	console.log("sidebar:", user)
 	return (
 		<div>
-			<Icon className='menu-bars' onClick={showSidebar}>
+			<Icon className='menu-bars' onClick={e => showSidebar()}>
 				<MenuRounded />
 			</Icon>
-			{/* <FaIcons.FaBars  onClick={} /> */}
 			<nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-				<ul className='nav-menu-items' onClick={showSidebar}>
+				<ul className='nav-menu-items' onClick={e => showSidebar()}>
 					<li className='navbar-toggle'>
 						<Icon>
 							<MenuOpenRounded fontSize='large' />
 						</Icon>
 					</li>
-					{SidedbarData.map((item, index) => {
-						return (
-							<li key={index} className='nav-text'>
-								<Link to={item.path}>
-									<Icon>{item.icon}</Icon>
-									<span className='nav-item-title'>{item.title}</span>
-								</Link>
-							</li>
-						)
+					{user === 'admin' && SidedbarData.map((item, index) => {
+						return <li key={index} className='nav-text'>
+							<Link to={item.path} style={{ color: '#ffffff' }}>
+								<Icon style={{ height: '40px' }}>{item.icon}</Icon>
+								<span className='nav-item-title'>{item.title}</span>
+							</Link>
+						</li>
 					})}
-					{/* Sign Out Button */}
-					<li className='nav-text sign-out'>
-						<button
-							onClick={() => {
-								console.log('clicked')
-								// setUser({})
-								firebase.auth().signOut()
-								setSignOut(true)
-							}}
-						>
-							<Icon>
-								<ExitToApp />
-							</Icon>
-							<span className='nav-item-title'>{'SignOut'}</span>
-						</button>
-					</li>
+					{
+						(!!user || !!username) && <li className='nav-text sign-out' style={{ display: 'flex', justifyContent: 'left' }}>
+							<Link
+								to='/'
+								onClick={() => setSignOut(true)}
+								style={{ color: '#ffffff' }}>
+								<Icon style={{ height: '40px' }}	>
+									<ExitToApp />
+								</Icon>
+								<span className='nav-item-title'>{'SignOut'}</span>
+							</Link>
+						</li>
+					}
 				</ul>
 			</nav>
 		</div>
@@ -90,14 +80,3 @@ function Sidebar({ setUsername }) {
 }
 
 export default Sidebar
-/*
-if (!!(firebase.auth().currentUser) || index === 1)
-							return (
-								<li key={index} className='nav-text'>
-									<Link to={item.path}>
-										<Icon>{item.icon}</Icon>
-										<span className='nav-item-title'>{item.title}</span>
-									</Link>
-								</li>
-							)
-*/

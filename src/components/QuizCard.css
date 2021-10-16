@@ -67,3 +67,7 @@
 	justify-content: space-between;
 	align-items: center;
 }
+.myCard {
+	background-color: '#294634';
+	color: '#ffffff'
+}

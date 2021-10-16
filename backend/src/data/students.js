@@ -1,2 +1,9 @@
 let students = []
-module.exports = students
+let clients = []
+let tests = []
+
+module.exports = {
+  students,
+  clients,
+  tests
+}

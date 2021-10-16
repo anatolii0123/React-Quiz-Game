@@ -51,9 +51,12 @@ const AttemptedModal = ({ result, totalScore, showModal }) => {
 							? "Not Submitted ! "
 							: `Score: ${result}/${totalScore}`}
 					</h1>
-					<Link to={"/dashboard"}>
-						<button className="button wd-200">Dashboard</button>
-					</Link>
+					<div id='row'>
+						<Link to={"/dashboard"}>
+							<button className="button wd-200">Dashboard</button>
+						</Link>
+						<button className="button wd-200" onClick={() => setOpen(false)}>Return</button>
+					</div>
 				</div>
 			</Modal>
 		</div>

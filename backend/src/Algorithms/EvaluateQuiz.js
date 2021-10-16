@@ -21,7 +21,6 @@ const EvaluateQuiz = (quizQuestions, attemptedQuestions) => {
 				if (correct !== undefined) qScore += weightage
 			})
 			qScore < 0 ? (score += 0) : (score += qScore)
-			console.log('Score : ', score)
 		} else if (realQues.optionType === 'radio') {
 			if (correctOptions[0].text === attemptedOptions[0]) {
 				score++
@@ -104,7 +103,5 @@ const q2 = [
 		selectedOptions: ['option 02'],
 	},
 ]
-
-// console.log(EvaluateQuiz(q1, q2))
 
 module.exports = EvaluateQuiz

@@ -113,7 +113,7 @@ input[type='submit'],
 .attemptQuestionCard {
 	padding: 20px;
 	box-shadow: var(--light-shadow) 1px 1px 1px 1px;
-	margin: 10px 0px;
+	margin: 0px 0px;
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
@@ -157,11 +157,33 @@ input[type='submit'],
   display: flex;
 	flex-direction: column;
   align-items: stretch;
-  background-color: #f1f1f1;
+	background-color: #ffffff;
 }
 .fixed {
 	flex-grow: 0;
 }
 .grow {
 	flex-grow: 1;
+}
+.topText {
+	font-size: 20px;
+}
+.markItem {
+	background-color: rgb(230,230,230) !important;
+	color: rgb(41,70,52) !important;
+	padding-top: 20px !important;
+	padding-bottom: 20px !important;
+}
+.fileInput {
+	display: inline-block;
+	margin: 10px;
+	padding: 15px;
+	font-size: 15px;
+	text-transform: uppercase;
+	transition: 0.5s;
+	background-size: 200% auto;
+	border-radius: 50px;
+	border: none;
+	background-color: #a17f50;
+	color: var(--primary);
 }

@@ -9,12 +9,12 @@
 	padding: 0px 5px;
 	padding-right: 15px;
 	justify-content: space-between;
-	background-color: #294634;
+	background-color: #A17F50;
 	box-shadow: black 0px 1px 6px;
 }
 .slider {
   z-index: 9;
-  background-color: #294634;
+  background-color: #A17F50;;
   height: 70px;
   display: flex;
   justify-content: center;
@@ -28,6 +28,18 @@
   font-size: 30px;
   color: var(--primary);
   text-decoration: none;
+}
+.admin {
+  text-align: center;
+  /* font-family: Roboto; */
+  font-style: normal;
+  padding: 10px;
+  font-size: 18px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.admin:hover {
+  color: var(--accent-mustard);
 }
 .home b {
   /* font-family: Roboto; */

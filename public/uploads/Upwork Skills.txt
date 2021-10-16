@@ -1,0 +1,7 @@
+-Upwork Skills
+
+JS frame- (frontend) React, Vue, Angular, 
+NOde,php (backend) Laravel
+
+CMS- (full) wordpress, shopify, Squarespace, Joomla, Drupal, PrestaShop,
+   	    wix,

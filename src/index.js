@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import { ToastProvider } from 'react-toast-notifications'
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById("root")

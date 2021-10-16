@@ -11,13 +11,10 @@ const JoinQuiz = () => {
 	const handleJoinQuiz = () => {
 		if (code.length) setValid('attempt-quiz')
 	}
-	const handleJoinBlindQuiz = () => {
-		if (code.length) setValid('attempt-blind-quiz')
-	}
 	if (localStorage.getItem('username') == undefined) {
-		return <Redirect to='/name' />
+		return <Redirect to='/' />
 	}
-	if (valid !== 'false') return <Redirect push to={`/${valid}/${code}/0`} />
+	if (valid !== 'false') return <Redirect push to={`/${valid}/${code}`} />
 	// if (valid === 'join-blind')
 	// 	return <Redirect push to={`attempt-blind-quiz/${code}`} />
 
@@ -25,7 +22,7 @@ const JoinQuiz = () => {
 		<div id='join-quiz'>
 			<div id='join-quiz-div'>
 				<div id='logo-name'>
-					<b style={{ fontweight: 600 }}>Quiz</b>dom
+					<b style={{ fontweight: 600 }}>Quiz</b>
 				</div>
 				<input
 					value={code}
@@ -38,11 +35,8 @@ const JoinQuiz = () => {
 						if (event.key === 'Enter') handleJoinQuiz()
 					}}
 				/>
-				<button className='join-button' onClick={handleJoinQuiz}>
+				<button className='button wd-200' onClick={handleJoinQuiz}>
 					Join Quiz
-				</button>
-				<button className='join-button' onClick={handleJoinBlindQuiz}>
-					Join As a Blind
 				</button>
 			</div>
 		</div>

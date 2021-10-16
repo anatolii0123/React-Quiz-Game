@@ -19,13 +19,11 @@ const Responses = ({ match }) => {
 				},
 			})
 			const result = await res.json()
-			console.log(result)
 			setResponses(result.finalResponse)
 			setLoading(false)
 		}
 		getResponses()
 	}, [quizId, uid])
-	console.log(responses)
 	if (loading) return <LoadingScreen />
 	else
 		return (
