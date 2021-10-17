@@ -1,11 +1,8 @@
 import React from 'react'
-import { Redirect, Link } from 'react-router-dom'
-import { Row, Col, Form, InputGroup } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { Row, Col, Form } from 'react-bootstrap'
 import './CreateQuiz.css'
 import AddQuestionModal from '../components/AddQuestionModal'
-import QuestionsTable from '../components/QuestionsTable'
-import { Switch } from '@material-ui/core'
-import LoadingScreen from './LoadingScreen'
 
 export default class CreateQuiz extends React.Component {
 	constructor(props) {
@@ -18,6 +15,7 @@ export default class CreateQuiz extends React.Component {
 			editing: false,
 			curIndex: -1,
 			type: "Qur'an",
+			teacher: '',
 			isOpen: false
 		}
 	}
@@ -31,25 +29,25 @@ export default class CreateQuiz extends React.Component {
 				},
 			})
 			const result = await res.json()
-			this.setState({ title: result.quizData.title, questions: result.quizData.questions, type: result.quizData.type, isOpen: result.quizData.isOpen })
+			this.setState({ title: result.quizData.title, questions: result.quizData.questions, type: result.quizData.type, isOpen: result.quizData.isOpen, teacher: result.quizData.teacher || '' })
 		}
 	}
-	addQuestionHandle = (title, optionType, options) => {
+	addQuestionHandle = (title, optionType, time, options) => {
 		const { curIndex, questions } = this.state
 		if (curIndex < 0) {
-			questions.push({ title, optionType, options })
+			questions.push({ title, optionType, options, time })
 		}
 		else {
-			questions[curIndex] = { title, optionType, options }
+			questions[curIndex] = { title, optionType, options, time }
 		}
 		this.setState({ questions })
 	}
 	onSave = async () => {
-		const { title, quizId, questions, type, isOpen } = this.state
+		const { title, quizId, questions, type, teacher, isOpen } = this.state
 		if (quizId) {
 			const res = await fetch('/API/quizzes/edit', {
 				method: 'POST',
-				body: JSON.stringify({ title, questions, type, quizId, isOpen }),
+				body: JSON.stringify({ title, questions, type, quizId, isOpen, teacher }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -99,8 +97,19 @@ export default class CreateQuiz extends React.Component {
 		questions.splice(index, 1)
 		this.setState({ questions })
 	}
+	removeImage = index => {
+		let { questions } = this.state
+		questions[index].image = ''
+		this.setState({ questions })
+	}
+	removeAudio = index => {
+		let { questions } = this.state
+		questions[index].audio = ''
+		this.setState({ questions })
+	}
+
 	render() {
-		const { access, title, questions, curIndex, editing, type } = this.state
+		const { teacher, title, questions, curIndex, editing, type } = this.state
 		console.log('current type:', type)
 		return (
 			<div id='main-body' style={{ backgroundColor: '#FFFFFF' }}>
@@ -121,6 +130,28 @@ export default class CreateQuiz extends React.Component {
 								/>
 							</Col>
 							<Col md='auto'>
+								<select name="cars" className="custom-select" style={{ width: '150px', marginTop: '10px' }} value={type} onChange={e => this.setState({ type: e.target.value })}>
+									<option value="Qur'an">Qur'an</option>
+									<option value='Arabic'>Arabic</option>
+									<option value='Islamic Studies'>Islamic Studies</option>
+								</select>
+							</Col>
+							<Col md='auto'>
+								<input
+									style={{ width: '200px', height: '35px', fontSize: '25px', border: 'none' }}
+									type='text'
+									className='input-text'
+									value={teacher}
+									onChange={(e) => this.setState({ teacher: e.target.value })}
+									id='quiz-teacher'
+									placeholder='Teacher Name'
+									autoFocus
+									autoComplete='off'
+								/>
+							</Col>
+						</Row>
+						<Row style={{ justifyContent: 'flex-end' }}>
+							<Col md='auto'>
 								<button
 									// disabled={!(title.length && questionArray.length)}
 									className='button'
@@ -129,13 +160,6 @@ export default class CreateQuiz extends React.Component {
 								>
 									+Question
 								</button>
-							</Col>
-							<Col md='auto'>
-								<select name="cars" className="custom-select" style={{ width: '150px', marginTop: '10px' }} value={type} onChange={e => this.setState({ type: e.target.value })}>
-									<option value="Qur'an">Qur'an</option>
-									<option value='Arabic'>Arabic</option>
-									<option value='Islamic Studies'>Islamic Studies</option>
-								</select>
 							</Col>
 							<Col md='auto'>
 								<button
@@ -184,7 +208,7 @@ export default class CreateQuiz extends React.Component {
 										<Row style={{ paddingTop: '20px', paddingBottom: '20px', marginLeft: '2px', marginRight: '2px', height: '180px', backgroundColor: '#F1F1F1' }}>
 											<Col xs={4} md={4} lg={4} xl={4} style={{ display: 'flex', justifyContent: 'center' }}>
 												{
-													!!question.image && <img src={question.image} style={{ width: '100%' }}></img>
+													!!question.image && <img src={question.image} style={{ width: '100%' }} alt=''></img>
 												}
 											</Col>
 											<Col xs={8} md={8} lg={8} xl={8}>
@@ -197,25 +221,41 @@ export default class CreateQuiz extends React.Component {
 										</Row>
 										<div style={{ backgroundColor: '#CCCCCC' }}>
 											<Row style={{ justifyContent: 'space-around' }}>
-												<div style={{ position: 'relative', width: '90px' }}>
-													<div className='fileInput' style={{ height: '35px', paddingTop: '5px' }}>+Image</div>
-													<Form.Control type="file" onChange={e => this.onChangeFile(e.target.files[0], index, 'image')} style={{ position: 'absolute', width: '90px', height: '35px', left: '12px', top: '0', opacity: '0' }} />
-												</div>
-												{/* <div style={{ position: 'relative', width: '90px' }}>
-													<div className='fileInput' style={{ height: '35px', paddingTop: '5px' }}>+Audio</div>
-													<Form.Control type="file" onChange={e => this.onChangeFile(e.target.files[0], index, 'audio')} style={{ position: 'absolute', width: '90px', height: '35px', left: '12px', top: '0', opacity: '0' }} />
-												</div> */}
+												{
+													!question.image ? <div style={{ position: 'relative', width: '90px', padding: '0' }}>
+														<div className='fileInput' style={{ height: '35px', paddingTop: '5px', marginLeft: '0' }}>+Image</div>
+														<Form.Control type="file" onChange={e => this.onChangeFile(e.target.files[0], index, 'image')} style={{ position: 'absolute', width: '90px', height: '35px', top: '0', opacity: '0' }} />
+													</div> : <button
+														className='button'
+														onClick={() => this.removeImage(index)}
+														style={{ height: '35px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px', marginLeft: '0' }}
+													>
+														-Image
+													</button>
+												}
+												{
+													!question.audio ? <div style={{ position: 'relative', width: '90px', padding: '0' }}>
+														<div className='fileInput' style={{ height: '35px', paddingTop: '5px', marginLeft: '0' }}>+Audio</div>
+														<Form.Control type="file" onChange={e => this.onChangeFile(e.target.files[0], index, 'audio')} style={{ position: 'absolute', width: '90px', height: '35px', top: '0', opacity: '0' }} />
+													</div> : <button
+														className='button'
+														onClick={() => this.removeAudio(index)}
+														style={{ height: '35px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px', marginLeft: '0' }}
+													>
+														-Audio
+													</button>
+												}
 												<button
 													className='button'
 													onClick={() => this.setState({ editing: true, curIndex: index })}
-													style={{ height: '35px', fontSize: '12px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px' }}
+													style={{ height: '35px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px' }}
 												>
 													EDIT
 												</button>
 												<button
 													className='button'
 													onClick={() => this.deleteQuiz(index)}
-													style={{ height: '35px', fontSize: '12px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px' }}
+													style={{ height: '35px', paddingTop: '3px', paddingBottom: '5px', width: '90px', fontSize: '15px', marginTop: '10px' }}
 												>
 													DELETE
 												</button>
@@ -229,7 +269,7 @@ export default class CreateQuiz extends React.Component {
 										<Row style={{ backgroundColor: '#F1F1F1', height: '235px', marginLeft: '2px', marginRight: '2px' }}>
 											<Col style={{ paddingLeft: '30px', overflow: 'y', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
 												{
-													question.options.map((opt, idx) => idx % 2 == 0 && <Row style={{ marginTop: '10px' }}>
+													question.options.map((opt, idx) => idx % 2 === 0 && <Row style={{ marginTop: '10px' }} key={idx}>
 														<form>
 															<input type={question.optionType === 'radio' ? 'radio' : 'checkbox'} id="vehicle1" name="vehicle1" value="Bike" readOnly checked={opt.isCorrect} />
 															<label htmlFor="vehicle1" style={{ marginLeft: '10px' }}>{opt.text}</label>
@@ -239,7 +279,7 @@ export default class CreateQuiz extends React.Component {
 											</Col>
 											<Col style={{ paddingLeft: '30px', overflow: 'y', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
 												{
-													question.options.map((opt, idx) => idx % 2 == 1 && <Row style={{ marginTop: '10px' }}>
+													question.options.map((opt, idx) => idx % 2 === 1 && <Row style={{ marginTop: '10px' }} key={idx}>
 														<form>
 															<input type={question.optionType === 'radio' ? 'radio' : 'checkbox'} id="vehicle1" name="vehicle1" value="Bike" readOnly checked={opt.isCorrect} />
 															<label htmlFor="vehicle1" style={{ marginLeft: '10px' }}>{opt.text}</label>

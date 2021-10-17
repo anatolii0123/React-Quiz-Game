@@ -169,11 +169,11 @@ const AdminDashboard = ({ showToast, setUsername, history, role }) => {
     })
     const res = await result.json()
     if (res.message === 'Success') {
-      showToast('Starting Quiz', 'Success')
       let quizzes = [...allQuizzes]
       const index = allQuizzes.findIndex(quiz => quiz._id === id)
       quizzes[index].started = true
       setAllQuizzes(allQuizzes)
+      showToast('Starting Quiz', 'Success')
     }
   }
 
@@ -190,11 +190,11 @@ const AdminDashboard = ({ showToast, setUsername, history, role }) => {
     })
     const res = await result.json()
     if (res.message === 'Success') {
-      showToast('Stopping Quiz', 'Success')
       let quizzes = [...allQuizzes]
       const index = allQuizzes.findIndex(quiz => quiz._id === id)
       quizzes[index].started = false
       setAllQuizzes(allQuizzes)
+      showToast('Stopping Quiz', 'Success')
     }
   }
 
@@ -258,6 +258,7 @@ const AdminDashboard = ({ showToast, setUsername, history, role }) => {
                 deleteQuiz={deleteQuiz}
                 title={quiz.title}
                 code={quiz._id}
+                teacher={quiz.teacher}
                 questions={quiz.questions.length}
                 isOpen={quiz.isOpen}
                 publishQuiz={publishQuiz}
@@ -285,6 +286,7 @@ const AdminDashboard = ({ showToast, setUsername, history, role }) => {
                 deleteQuiz={deleteQuiz}
                 title={quiz.title}
                 code={quiz._id}
+                teacher={quiz.teacher}
                 questions={quiz.questions.length}
                 isOpen={quiz.isOpen}
                 publishQuiz={publishQuiz}
@@ -312,6 +314,7 @@ const AdminDashboard = ({ showToast, setUsername, history, role }) => {
                 deleteQuiz={deleteQuiz}
                 title={quiz.title}
                 code={quiz._id}
+                teacher={quiz.teacher}
                 questions={quiz.questions.length}
                 isOpen={quiz.isOpen}
                 publishQuiz={publishQuiz}

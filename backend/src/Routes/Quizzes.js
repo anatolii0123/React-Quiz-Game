@@ -88,7 +88,7 @@ Router.delete('/:id', (req, res) => {
 })
 
 Router.post('/edit', (req, res) => {
-	const { quizId, title, questions, isOpen, type } = req.body
+	const { quizId, title, questions, isOpen, type, time, teacher, audio } = req.body
 
 	DB.withDB(async (db) => {
 		try {
@@ -101,7 +101,10 @@ Router.post('/edit', (req, res) => {
 						title,
 						questions,
 						isOpen,
-						type
+						type,
+						time,
+						audio,
+						teacher
 					},
 				},
 				(err, result) => {
@@ -153,7 +156,9 @@ Router.get('/all', (req, res) => {
 					_id: 1,
 					isOpen: 1,
 					title: 1,
+					teacher: 1,
 					questions: 1,
+					audio: 1,
 					type: 1
 				})
 			const quizData = await createdCursor.toArray();
@@ -179,6 +184,8 @@ Router.get('/:id', (req, res) => {
 					title: 1,
 					questions: 1,
 					type: 1,
+					audio: 1,
+					teacher: 1,
 					responses: {
 						$size: '$responses',
 					},
@@ -205,7 +212,9 @@ Router.get('/', (req, res) => {
 					_id: 1,
 					isOpen: 1,
 					title: 1,
+					audio: 1,
 					questions: 1,
+					teacher: 1,
 					type: 1
 				})
 			const quizData = await createdCursor.toArray();

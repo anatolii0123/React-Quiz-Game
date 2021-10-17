@@ -32,19 +32,20 @@ export default function AddQuestionModal({
 	type = 'add',
 	title = '',
 	opType = 'radio',
+	time = 10,
 	opArray,
 	index = -1,
 	addQuestionHandle,
 	open,
-	editQuestionHandle,
 	handleClose
 }) {
 	const classes = useStyles()
-	const [optionType, setOptionType] = useState('radio')
+	const [optionType, setOptionType] = useState(opType)
 	const [optionsArray, setOptionsArray] = useState([])
 	const [editedOption, setEditedOption] = useState(null)
 	const [editOpIndex, setEditOpIndex] = useState(-1)
-	const [titleField, setTitleField] = useState('')
+	const [titleField, setTitleField] = useState(title)
+	const [timeField, setTimeField] = useState(time)
 	const optionsRef = useRef(null)
 	const checkBoxRef = useRef(null)
 
@@ -52,11 +53,13 @@ export default function AddQuestionModal({
 		if (open) {
 			setTitleField(title)
 			setOptionType(opType)
+			setTimeField(time)
 			if (opArray) setOptionsArray(opArray)
 		} else {
 			setTitleField('')
 			setOptionsArray([])
 			setOptionType('radio')
+			setTimeField(10)
 		}
 	}, [open, title, opType, opArray])
 
@@ -91,8 +94,8 @@ export default function AddQuestionModal({
 			alert('No correct option was selected.')
 			return
 		}
-		if (index !== -1) addQuestionHandle(titleField, optionType, tempArr, index)
-		else addQuestionHandle(titleField, optionType, tempArr)
+		if (index !== -1) addQuestionHandle(titleField, optionType, timeField, tempArr, index)
+		else addQuestionHandle(titleField, optionType, timeField, tempArr)
 
 		handleClose()
 	}
@@ -174,19 +177,40 @@ export default function AddQuestionModal({
 								className='input-text question'
 								placeholder='Type Question Here'
 							/>
-							<select
-								id='select'
-								placeholder='Select'
-								onChange={handleTypeChange}
-							>
-								<option className='selectOp' value='radio'>
-									Single Answer
-								</option>
-								<option className='selectOp' value='check'>
-									Multiple Answers
-								</option>
-							</select>
-
+							<Row>
+								<select
+									id='select'
+									placeholder='Select'
+									value={optionType}
+									onChange={handleTypeChange}
+								>
+									<option className='selectOp' value='radio'>
+										Single Answer
+									</option>
+									<option className='selectOp' value='check'>
+										Multiple Answers
+									</option>
+								</select>
+								<select
+									id='select'
+									placeholder='Select'
+									value={timeField}
+									onChange={e => console.log("time changing:", e.target.value)}
+								>
+									<option className='selectOp' value={10}>
+										10s
+									</option>
+									<option className='selectOp' value={15}>
+										15s
+									</option>
+									<option className='selectOp' value={30}>
+										30s
+									</option>
+									<option className='selectOp' value={60}>
+										60s
+									</option>
+								</select>
+							</Row>
 							<div className='option-div'>
 								<div className='options' id='one-op'>
 									{optionsArray.map((option, ind) => (

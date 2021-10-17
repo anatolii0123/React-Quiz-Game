@@ -11,8 +11,8 @@ import JoinedQuizCard from '../components/JoinedQuizCard';
 import './AttemptQuiz.css'
 
 let socket
-const socketUrl = "/"
-// const socketUrl = "ws://192.168.104.16:3001"
+// const socketUrl = "/"
+const socketUrl = "ws://192.168.104.16:3001"
 
 class AttemptQuiz extends React.Component {
 	constructor(props) {
@@ -22,6 +22,7 @@ class AttemptQuiz extends React.Component {
 			questions: [],
 			attemptedQuestions: [],
 			quizTitle: '',
+			teacher: '',
 			loading: true,
 			result: {},
 			showModal: false,
@@ -85,6 +86,7 @@ class AttemptQuiz extends React.Component {
 			})
 			this.setState({
 				quizTitle: quizData.title,
+				teacher: quizData.teacher,
 				questions: quizData.questions,
 				loading: false,
 				attemptedQuestions: temp,
@@ -109,13 +111,25 @@ class AttemptQuiz extends React.Component {
 		this.checkNext()
 	}
 	timerFunc = () => {
-		let { waiting } = this.state
+		let { waiting, questions } = this.state
 		if (waiting > 0) {
 			--waiting;
 			this.setState({ waiting })
 			if (waiting === 0) {
 				clearInterval(this.timerId)
 				this.timerId = setInterval(this.clock, 1000)
+				const curAudio = questions[0].audio || '/audio.mp3'
+				if (this.url !== curAudio) {
+					console.log('playing:', curAudio)
+					this.audio.pause();
+					this.url = curAudio;
+					this.audio = new Audio(this.url);
+					this.audio.play()
+					this.audio.addEventListener('ended', function () {
+						this.audio = new Audio(this.url);
+						this.audio.play()
+					}, false);
+				}
 			}
 		}
 	}
@@ -208,6 +222,18 @@ class AttemptQuiz extends React.Component {
 				mark: 0,
 				timeout: 10
 			})
+			const curAudio = questions[number + 1].audio || '/audio.mp3'
+			console.log('playing:', curAudio)
+			if (this.url !== curAudio) {
+				this.audio.pause();
+				this.url = curAudio;
+				this.audio = new Audio(this.url);
+				this.audio.play()
+				this.audio.addEventListener('ended', function () {
+					this.audio = new Audio(this.url);
+					this.audio.play()
+				}, false);
+			}
 			this.timerId = setInterval(this.clock, 1000)
 		}
 		else {
@@ -309,7 +335,7 @@ class AttemptQuiz extends React.Component {
 	}
 
 	render = () => {
-		const { number, questions, attemptedQuestions, quizTitle, loading, path, showModal, score, mark, students, music, waiting, timeout } = this.state
+		const { number, questions, attemptedQuestions, quizTitle, teacher, loading, path, showModal, score, mark, students, music, waiting, timeout } = this.state
 		const { handleOptionSelect, checkNext } = this
 		const { quizCode } = this.props.match.params
 		if (loading) return <LoadingScreen />
@@ -401,8 +427,8 @@ class AttemptQuiz extends React.Component {
 										<div className='fixed' style={{ height: '60px', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
 											<Row style={{ marginLeft: 'auto', marginRight: 'auto' }}>
 												<Col><div className='topText' style={{ width: '200px' }}>Quiz 1</div></Col>
-												<Col><Icon style={{ height: '60px' }}>
-													<MusicNote fontSize='large' />
+												<Col><Icon style={{ height: '60px' }} onClick={e => this.handleMusic()}>
+													{music ? <MusicNote fontSize='large' /> : <MusicOff fontSize='large' />}
 												</Icon>
 												</Col>
 												<Col>
@@ -415,6 +441,7 @@ class AttemptQuiz extends React.Component {
 												{
 													!!quizTitle && <JoinedQuizCard
 														title={quizTitle}
+														teacher={teacher}
 														// score={quiz.responses[0].score}
 														questions={questions.length}
 														id={quizCode}

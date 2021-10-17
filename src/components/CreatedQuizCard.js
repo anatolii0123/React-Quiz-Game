@@ -11,6 +11,7 @@ import "./QuizCard.css"
 const CreatedQuizCard = ({
 	title,
 	code,
+	teacher,
 	questions,
 	isOpen,
 	index,
@@ -34,7 +35,7 @@ const CreatedQuizCard = ({
 		<b style={{ marginTop: '20px', borderBottom: '1px solid #ffffff', marginLeft: '12px', marginRight: '12px', paddingBottom: '10px', color: '#ffffff' }}>{title}</b>
 		<p style={{ borderBottom: '1px solid #ffffff', marginLeft: '12px', marginRight: '12px', marginBottom: '0px', paddingTop: '3px', paddingBottom: '3px', color: '#ffffff', fontSize: '12px' }}>Lesson Quiz</p>
 		{user === 'admin' && <p style={{ borderBottom: '1px solid #ffffff', marginLeft: '12px', marginRight: '12px', marginBottom: '0px', paddingTop: '3px', paddingBottom: '3px', color: '#ffffff', fontSize: '12px' }}>{code}</p>}
-		<p style={{ borderBottom: '1px solid #ffffff', marginLeft: '12px', marginRight: '12px', paddingTop: '3px', paddingBottom: '3px', color: '#ffffff', fontSize: '12px' }}>Teacher Shavez Muhammad</p>
+		<p style={{ borderBottom: '1px solid #ffffff', marginLeft: '12px', marginRight: '12px', paddingTop: '3px', paddingBottom: '3px', color: '#ffffff', fontSize: '12px' }}>{teacher}</p>
 		<Row style={{ marginBottom: '10px', paddingLeft: '15px', paddingRight: '15px' }}>
 			{
 				!isOpen && user === 'admin' && <Col>

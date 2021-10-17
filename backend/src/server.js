@@ -14,7 +14,7 @@ const userRoute = require('./Routes/Users')
 const quizzesRoute = require('./Routes/Quizzes')
 let { students, clients, tests } = require('./data/students')
 
-const PORT = process.env.PORT || 80
+const PORT = process.env.PORT || 3001
 
 app.use(express.json())
 app.use(fileUpload());
@@ -26,14 +26,17 @@ app.post('/API/upload', (req, res) => {
 	}
 
 	const file = req.files.file;
+	const index = file.name.lastIndexOf('.')
+	const format = file.name.substring(index, file.name.length)
+	const name = new Date().getTime().toString() + format
 
-	file.mv(`${__dirname}/build/uploads/${file.name}`, err => {
+	file.mv(`${__dirname}/build/uploads/${name}`, err => {
 		if (err) {
 			console.error(err);
 			return res.status(500).send(err);
 		}
 
-		res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+		res.json({ fileName: name, filePath: `/uploads/${name}` });
 	});
 })
 

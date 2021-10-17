@@ -6,7 +6,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: (!!env && env.includes('production')) ? 'https://quiz2001.herokuapp.com' : 'http://localhost:3000',
+      target: (!!env && env.includes('production')) ? 'https://quiz2001.herokuapp.com' : 'http://localhost:3001',
       changeOrigin: true,
     })
   );
